@@ -1,18 +1,44 @@
 # coding:utf-8
 from requests_oauthlib import OAuth1Session
 import json
-import secret
 import pprint
+import sys
 
-twitter = OAuth1Session(secret.CONSUMER_KEY, secret.CONSUMER_SECRET, secret.ACCESS_TOKEN, secret.ACCESS_TOKEN_SECRET)
+sys.path.append('./secret_key/')
+import secret
 
-params = {"status": "Hello, World!"}
-req = twitter.post("https://api.twitter.com/1.1/statuses/update.json", params = params)
+twitter = OAuth1Session(secret.CONSUMER_KEY,
+                        secret.CONSUMER_SECRET,
+                        secret.ACCESS_TOKEN,
+                        secret.ACCESS_TOKEN_SECRET
+                        )
 
-# timeline = json.loads(req.text)
+class getTwitterInfo:
+    def __init__(self):
+        pass
 
-# for tweet in timeline:
-#     print(tweet['user']['name'])
-#     print(tweet['text'])
-#     print('===')
-#     print()
+    def getTimeline(self):
+        params = {}
+        # Resource URL
+        url = 'https://api.twitter.com/1.1/statuses/home_timeline.json'
+        req = twitter.get(url, params=params)
+        timeline = json.loads(req.text)
+
+        return timeline
+
+        # for tweet in timeline:
+        #     print(tweet['user']['name'])
+        #     print(tweet['text'])
+        #     print('===')
+        #     print()
+
+    def getUserInfo(self):
+        pass
+
+
+def __main():
+    get_object = getTwitterInfo()
+    timeline = get_object.getTimeline()
+
+if __name__ == '__main__':
+    __main()
