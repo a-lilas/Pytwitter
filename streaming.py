@@ -14,3 +14,5 @@ class StdOutListener(StreamListener):
         status.created_at += datetime.timedelta(hours=9)
         if status.in_reply_to_screen_name == secret.MY_USER_ID:
             pass
+        else:
+            pass
