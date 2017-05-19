@@ -12,4 +12,5 @@ import secret
 class StdOutListener(StreamListener):
     def on_status(self, status):
         status.created_at += datetime.timedelta(hours=9)
-        if status.in_reply_to_screen_name == ''
+        if status.in_reply_to_screen_name == secret.MY_USER_ID:
+            pass

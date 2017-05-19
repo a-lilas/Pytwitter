@@ -5,7 +5,7 @@ import pprint
 import sys
 import tweepy
 
-sys.path.append('./secret_key/')
+sys.path.append('./secret_key_bot/')
 import secret
 
 auth = tweepy.OAuthHandler(secret.CONSUMER_KEY, secret.CONSUMER_SECRET)
