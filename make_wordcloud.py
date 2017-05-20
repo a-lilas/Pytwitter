@@ -5,6 +5,7 @@ from pprint import *
 import MeCab
 import CaboCha
 import secret
+import datetime
 
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
@@ -95,9 +96,10 @@ def makecloud(tw):
     plt.figure(figsize=(12, 9))
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.show()
+    # plt.show()
+    plt.savefig('./wordcloud_image/' + str(datetime.datetime.today()) + '.png')
 
-
+ 
 def __main():
     tw = TwitterOperator()
     # ダブルクォーテーションで検索する単語を囲むこと
