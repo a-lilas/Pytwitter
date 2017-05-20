@@ -101,9 +101,8 @@ def makecloud(tw):
 def __main():
     tw = TwitterOperator()
     # ダブルクォーテーションで検索する単語を囲むこと
-    tw.searchWord(['シャドバ'])
+    tw.searchWord(['安部菜々'])
     makecloud(tw)
 
 if __name__ == '__main__':
     __main()
-
