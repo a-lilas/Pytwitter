@@ -20,14 +20,16 @@ class Listener(tweepy.StreamListener):
             searchword = re.sub(r'^@.+? ', '', status.text)
             # 空白で，リストに分割
             searchword_list = searchword.split()
+            # filename:時刻を名前にする
+            filename_time = str(datetime.datetime.today())
 
             tw = makewc.TwitterOperator()
             tw.searchWord(searchword_list)
-            makewc.makecloud(tw)
+            makewc.makecloud(tw, './wordcloud_image/' + filename_time + '.png')
             # ツイート内容を以下の変数に記述
-            tweet = '@' + status.user.screen_name + ' test ' + str(datetime.datetime.today())
-
-            # twpy.api.update_status(status=tweet)
+            tweet = '@' + status.user.screen_name + ' ' + ' '.join(searchword_list) + ' ' + filename_time \
+                                    + ' #wordcloud #ワードクラウド'
+            twpy.api.update_with_media(filename='./wordcloud_image/'+filename_time+'.png', status=tweet)
 
         return True
 

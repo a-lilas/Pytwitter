@@ -44,13 +44,13 @@ class TwitterOperator:
         # query = ' OR '.join(keywords)
         query = query + ' -RT'
 
-        for tweet in twpy.api.search(q=query, count=500):
+        for tweet in twpy.api.search(q=query, count=750):
             self.data.append(tweet.text)
 
         return self.data
 
 
-def makecloud(tw):
+def makecloud(tw, filename):
     c = CaboCha.Parser()
     tmp_list = []
     word_list = []
@@ -97,9 +97,9 @@ def makecloud(tw):
     plt.imshow(wordcloud)
     plt.axis("off")
     # plt.show()
-    plt.savefig('./wordcloud_image/' + str(datetime.datetime.today()) + '.png')
+    plt.savefig(filename)
 
- 
+
 def __main():
     tw = TwitterOperator()
     # ダブルクォーテーションで検索する単語を囲むこと
