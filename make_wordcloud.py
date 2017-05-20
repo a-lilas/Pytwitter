@@ -30,12 +30,15 @@ class TwitterOperator:
 
         self.keywords = keywords
 
+        # 検索する文字列(ダブルクォーテーションで囲む処理)
+        searchwords = list(map(lambda word: '"'+word+'"', self.keywords))
+
         # Twitter 検索方法
         # queryにキーワードを入れて，api.searchに入れる
         # NOT検索が以下のようにして可能
 
         # 検索ワード
-        query = ' '.join(keywords)
+        query = ' '.join(searchwords)
         # query = ' AND '.join(keywords)
         # query = ' OR '.join(keywords)
         query = query + ' -RT'
@@ -97,7 +100,8 @@ def makecloud(tw):
 
 def __main():
     tw = TwitterOperator()
-    tw.searchWord(['FGO'])
+    # ダブルクォーテーションで検索する単語を囲むこと
+    tw.searchWord(['シャドバ'])
     makecloud(tw)
 
 if __name__ == '__main__':
