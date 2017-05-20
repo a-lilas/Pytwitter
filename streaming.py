@@ -24,7 +24,6 @@ class Listener(tweepy.StreamListener):
             tw = makewc.TwitterOperator()
             tw.searchWord(searchword_list)
             makewc.makecloud(tw)
-
             # ツイート内容を以下の変数に記述
             tweet = '@' + status.user.screen_name + ' test ' + str(datetime.datetime.today())
 
