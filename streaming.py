@@ -12,6 +12,7 @@ import make_wordcloud as makewc
 
 class Listener(tweepy.StreamListener):
     def __init__(self, api):
+        # 初期化
         super().__init__(api)
         self.me = twpy.api.me()
 
