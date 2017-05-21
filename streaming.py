@@ -29,6 +29,9 @@ class Listener(tweepy.StreamListener):
                                     + ' #wordcloud #ワードクラウド'
             twpy.api.update_with_media(filename='./wordcloud_image/'+filename_time+'.png', status=tweet)
 
+            # ログ出力
+            f.write(' '.join(searchword_list) + ' ' + filename_time + '\n')
+
         return True
 
     def on_error(self, status_code):
@@ -39,7 +42,10 @@ class Listener(tweepy.StreamListener):
         print('Timeout...')
 
 
-# Twitterオブジェクトの生成
-listener = Listener()
-stream = tweepy.Stream(twpy.auth, listener)
-stream.userstream()
+# ログファイルに追記モードで読み込み
+with open('./log/wordlog.log', 'a') as f:
+    # Twitterオブジェクトの生成
+    listener = Listener()
+    stream = tweepy.Stream(twpy.auth, listener)
+    stream.userstream()
+
