@@ -11,6 +11,10 @@ import make_wordcloud as makewc
 
 
 class Listener(tweepy.StreamListener):
+    def __init__(self, api):
+        super().__init__(api)
+        self.me = twpy.api.me()
+
     def on_status(self, status):
         status.created_at += datetime.timedelta(hours=9)
         if str(status.in_reply_to_screen_name) == secret.MY_USER_ID:
@@ -41,11 +45,21 @@ class Listener(tweepy.StreamListener):
     def on_timeout(self):
         print('Timeout...')
 
+    def on_event(self, event):
+        try:
+            if event.event == 'follow':
+                if self.me.id != event.source["id"]:
+                    source_user = event.source
+                    twpy.api.create_friendship(source_user["id"])
+                    print("followed　by {} {}".format(source_user["name"], source_user["screen_name"]))
+        except:
+            pass
+
 
 # ログファイルに追記モードで読み込み
 with open('./log/wordlog.log', 'a') as f:
     # Twitterオブジェクトの生成
-    listener = Listener()
+    listener = Listener(twpy.api)
     stream = tweepy.Stream(twpy.auth, listener)
     stream.userstream()
 
