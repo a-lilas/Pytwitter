@@ -20,14 +20,16 @@ class TwitterOperator:
         self.data = []
         self.keywords = []
 
-    def myTweet(self):
-        user_id = secret.MY_USER_ID
-        for tweet in twpy.api.user_timeline(user_id, count=500):
+    def getTimeline(self, get_id):
+        # 特定のidのタイムラインを取得
+        user_id = get_id
+        for tweet in twpy.api.user_timeline(user_id, count=600):
             self.data.append(tweet.text)
 
         return self.data
 
     def searchWord(self, keywords):
+        # keywordsについてツイート検索し，その結果を取得
 
         self.keywords = keywords
 
