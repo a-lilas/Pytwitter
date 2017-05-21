@@ -4,8 +4,6 @@ import twpy
 import tweepy
 from pprint import *
 import datetime
-import MeCab
-import CaboCha
 import secret
 import make_wordcloud as makewc
 
@@ -27,7 +25,7 @@ class Listener(tweepy.StreamListener):
             tw.searchWord(searchword_list)
             makewc.makecloud(tw, './wordcloud_image/' + filename_time + '.png')
             # ツイート内容を以下の変数に記述
-            tweet = '@' + status.user.screen_name + ' ' + ' '.join(searchword_list) + ' ' + filename_time \
+            tweet = '.@' + status.user.screen_name + ' ' + ' '.join(searchword_list) + ' ' + filename_time \
                                     + ' #wordcloud #ワードクラウド'
             twpy.api.update_with_media(filename='./wordcloud_image/'+filename_time+'.png', status=tweet)
 

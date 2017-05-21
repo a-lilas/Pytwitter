@@ -44,7 +44,7 @@ class TwitterOperator:
         # query = ' OR '.join(keywords)
         query = query + ' -RT'
 
-        for tweet in twpy.api.search(q=query, count=750):
+        for tweet in twpy.api.search(q=query, count=600):
             self.data.append(tweet.text)
 
         return self.data
@@ -58,13 +58,19 @@ def makecloud(tw, filename):
     r2 = r'[\t\, ]'
 
     for i, tweet in enumerate(tw.data):
-        tree = c.parse(tweet)
-        col = tree.toString(CaboCha.FORMAT_LATTICE)
-        # 改行による分割
-        col = re.split(r1, col)
-        # pprint(col)
+        # MeCabによる実装
+        tagger = MeCab.Tagger()
+        result = tagger.parse(tweet)
 
-        for morph in col:
+        # CaboChaによる実装(今回は使用しない)
+        # tree = c.parse(tweet)
+        # col = tree.toString(CaboCha.FORMAT_LATTICE)
+
+        # 改行による分割
+        result = re.split(r1, result)
+        # pprint(result)
+
+        for morph in result:
             element = re.split(r2, morph)
             if '名詞' in element and '組織' not in element:
                 word_list.append(element[0])
