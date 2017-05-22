@@ -67,6 +67,7 @@ class Listener(tweepy.StreamListener):
     def on_event(self, event):
         try:
             if event.event == 'follow':
+                print("followed")
                 if self.me.id != event.source["id"]:
                     source_user = event.source
                     twpy.api.create_friendship(source_user["id"])
