@@ -1,7 +1,2 @@
 __pycache__/
-Procfile
-requirements.txt
-.buildpacks
-.cellar
-runtime.txt
 
