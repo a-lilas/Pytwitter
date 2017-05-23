@@ -18,15 +18,37 @@ class TwitterOperator:
 
     def __init__(self):
         self.data = []
+        self.reply_to_me = []
+        self.search_tweet = []
         self.keywords = []
+        self.me = twpy.api.me()
 
     def getTimeline(self, get_id):
         # 特定のidのタイムラインを取得
         user_id = get_id
         for tweet in twpy.api.user_timeline(user_id, count=600):
-            self.data.append(tweet.text)
+            self.data.append(tweet)
 
         return self.data
+
+    def getMyLatestTweetID(self):
+        # 自分の最新ツイートを取得,そのツイートIDを返す
+        user_id = self.me.id
+        latest_tweet = twpy.api.user_timeline(user_id, count=1)[0]
+        print(latest_tweet.id)
+
+        return latest_tweet.id
+
+    def getMyMention(self, since_id):
+        # 自分への(引数：since_id以降の)リプライを取得する．
+        for tweet in twpy.api.mentions_timeline(since_id=since_id):
+            self.reply_to_me.append(tweet)
+            # print(tweet.text)
+
+        return self.reply_to_me
+
+    def replyCloudImage(self):
+        pass
 
     def searchWord(self, keywords):
         # keywordsについてツイート検索し，その結果を取得
@@ -47,19 +69,20 @@ class TwitterOperator:
         query = query + ' -RT'
 
         for tweet in twpy.api.search(q=query, count=600):
-            self.data.append(tweet.text)
+            self.search_tweet.append(tweet.text)
 
-        return self.data
+        return self.search_tweet
 
 
-def makecloud(tw, filename):
-    c = CaboCha.Parser()
+def makecloud(tw, filename, object_tweet):
+    # c = CaboCha.Parser()
     tmp_list = []
     word_list = []
     r1 = r'\n'
     r2 = r'[\t\, ]'
 
-    for i, tweet in enumerate(tw.data):
+    # 引数にとったツイート群に対して形態素解析
+    for i, tweet in enumerate(object_tweet):
         # MeCabによる実装
         tagger = MeCab.Tagger()
         result = tagger.parse(tweet)
@@ -104,15 +127,48 @@ def makecloud(tw, filename):
     plt.figure(figsize=(12, 9))
     plt.imshow(wordcloud)
     plt.axis("off")
-    # plt.show()
-    plt.savefig(filename)
+    plt.show()
+    # plt.savefig(filename)
 
 
 def __main():
     tw = TwitterOperator()
     # ダブルクォーテーションで検索する単語を囲むこと
-    tw.searchWord(['てすと'])
-    makecloud(tw)
+    latest_tweet_id = tw.getMyLatestTweetID()
+
+    # 自分へのsince_id以降のリプライを取得
+    tw.getMyMention(since_id=latest_tweet_id)
+
+    for status in tw.reply_to_me:
+        status.created_at += datetime.timedelta(hours=9)
+        if str(status.in_reply_to_screen_name) == secret.MY_USER_ID:
+            # ツイートから，@以下を削除し，対象単語のみを抽出
+            searchword = re.sub(r'^@.+? ', '', status.text)
+
+            # filename:時刻を名前にする
+            filename_time = str(datetime.datetime.today())
+
+            if searchword != '@'+secret.MY_USER_ID:
+                # 単語が，ユーザ名と一致しない -> 検索単語が含まれている
+                # 空白で，リストに分割
+                searchword_list = searchword.split()
+                print(searchword_list)
+                # 入力された単語についてツイート検索
+                tw.searchWord(searchword_list)
+            else:
+                # リプライ内に検索単語が含まれない
+                # リプライしてきたユーザのタイムラインを取得
+                searchword_list = ['']
+                print(searchword_list)
+                tw.getTimeline(get_id=status.user.screen_name)
+
+        # ワードクラウド作成
+        makecloud(tw, './wordcloud_image/' + filename_time + '.png', tw.search_tweet)
+
+        # ツイート内容を以下の変数に記述
+        tweet = '.@' + status.user.screen_name + ' ' + ' '.join(searchword_list) + ' ' + filename_time \
+                                + ' #wordcloud #ワードクラウド'
+
 
 if __name__ == '__main__':
     __main()
