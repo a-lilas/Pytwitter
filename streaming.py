@@ -52,9 +52,6 @@ class Listener(tweepy.StreamListener):
                                        in_reply_to_status_id=status.id
                                        )
 
-            # ログ出力
-            f.write(' '.join(searchword_list) + ' ' + filename_time + '\n')
-
         return True
 
     def on_error(self, status_code):
@@ -76,10 +73,7 @@ class Listener(tweepy.StreamListener):
             pass
 
 
-# ログファイルに追記モードで読み込み
-with open('./log/wordlog.log', 'a') as f:
-    # Twitterオブジェクトの生成
-    listener = Listener(twpy.api)
-    stream = tweepy.Stream(twpy.auth, listener)
-    stream.userstream()
-
+# Twitterオブジェクトの生成
+listener = Listener(twpy.api)
+stream = tweepy.Stream(twpy.auth, listener)
+stream.userstream()
