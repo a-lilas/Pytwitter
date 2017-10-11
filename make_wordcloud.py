@@ -74,8 +74,8 @@ def makecloud(tw, filename):
     wordcloud_text = ' '.join(word_list)
 
     # 環境に合わせてフォントのパスを指定する。
-    fpath = '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'
-    # fpath = '/usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf'
+    # fpath = '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'
+    fpath = '/usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf'
 
     # ストップワードの設定
     stop_words = [u'てる', u'いる', u'なる', u'れる', u'する', u'ある', u'こと', u'これ', \
@@ -102,11 +102,11 @@ def makecloud(tw, filename):
     plt.savefig(filename)
 
 
-def __main():
+def main():
     tw = TwitterOperator()
     # ダブルクォーテーションで検索する単語を囲むこと
     tw.searchWord(['てすと'])
-    makecloud(tw)
+    makecloud(tw, filename='aiueo')
 
 if __name__ == '__main__':
-    __main()
+    main()
