@@ -3,7 +3,6 @@ import re
 import twpy
 from pprint import *
 import MeCab
-import CaboCha
 import secret
 import datetime
 
@@ -53,7 +52,6 @@ class TwitterOperator:
 
 
 def makecloud(tw, filename):
-    c = CaboCha.Parser()
     tmp_list = []
     word_list = []
     r1 = r'\n'
@@ -61,12 +59,8 @@ def makecloud(tw, filename):
 
     for i, tweet in enumerate(tw.data):
         # MeCabによる実装
-        tagger = MeCab.Tagger()
+        tagger = MeCab.Tagger(' -d /usr/local/lib/mecab/dic/mecab-ipadic-neologd')
         result = tagger.parse(tweet)
-
-        # CaboChaによる実装(今回は使用しない)
-        # tree = c.parse(tweet)
-        # col = tree.toString(CaboCha.FORMAT_LATTICE)
 
         # 改行による分割
         result = re.split(r1, result)
