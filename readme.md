@@ -8,11 +8,11 @@ This is the bot program on Twitter, written in Python3.
 When this bot receives reply, this generates the WordCloud
 from tweets related to word in the reply.
 
-## Environment  
-* Python 3.6.0 (Anaconda 4.3.0)  
-* Mecab 0.996
-    * mecab-ipadic-neologd
-* Cabocha 0.69
-* mecab-python3 0.7
-* cabocha-python 0.69
-* tweepy 3.5.0
+## How to Use
+- Dockerイメージの作成  
+`docker build -t <name> .`
+- Dockerコンテナの起動  
+`docker run -d -it -v /path/to/secret.py:/twitter-wordcloud-bot/secret_key_bot/secret.py <name>`
+
+## Twitter API Key
+ホストとコンテナ間における鍵の移動については，`-v`を用いて行う．
