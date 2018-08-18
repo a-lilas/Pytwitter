@@ -97,8 +97,8 @@ def makecloud(tw, filename, object_tweet):
     wordcloud_text = ' '.join(word_list)
 
     # 環境に合わせてフォントのパスを指定する。
-    fpath = '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'
-    # fpath = '/usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf'
+    # fpath = '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'
+    fpath = '/usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf'
 
     # ストップワードの設定
     stop_words = [u'てる', u'いる', u'なる', u'れる', u'する', u'ある', u'こと', u'これ', \
