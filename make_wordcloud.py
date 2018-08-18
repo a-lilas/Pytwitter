@@ -3,8 +3,7 @@ import re
 import twpy
 from pprint import *
 import MeCab
-import CaboCha
-import secret
+from secret_key_bot import secret
 import datetime
 
 import matplotlib.pyplot as plt
@@ -52,7 +51,7 @@ class TwitterOperator:
 
     def searchWord(self, keywords):
         # keywordsについてツイート検索し，その結果を取得
-
+        self.search_tweet = []
         self.keywords = keywords
 
         # 検索する文字列(ダブルクォーテーションで囲む処理)
@@ -75,7 +74,6 @@ class TwitterOperator:
 
 
 def makecloud(tw, filename, object_tweet):
-    # c = CaboCha.Parser()
     tmp_list = []
     word_list = []
     r1 = r'\n'
@@ -86,10 +84,6 @@ def makecloud(tw, filename, object_tweet):
         # MeCabによる実装
         tagger = MeCab.Tagger()
         result = tagger.parse(tweet)
-
-        # CaboChaによる実装(今回は使用しない)
-        # tree = c.parse(tweet)
-        # col = tree.toString(CaboCha.FORMAT_LATTICE)
 
         # 改行による分割
         result = re.split(r1, result)
@@ -127,8 +121,8 @@ def makecloud(tw, filename, object_tweet):
     plt.figure(figsize=(12, 9))
     plt.imshow(wordcloud)
     plt.axis("off")
-    plt.show()
-    # plt.savefig(filename)
+    # plt.show()
+    plt.savefig(filename)
 
 
 def __main():
@@ -138,9 +132,9 @@ def __main():
 
     # 自分へのsince_id以降のリプライを取得
     tw.getMyMention(since_id=latest_tweet_id)
-
-    for status in tw.reply_to_me:
+    for status in reversed(tw.reply_to_me):
         status.created_at += datetime.timedelta(hours=9)
+        print(status.created_at)
         if str(status.in_reply_to_screen_name) == secret.MY_USER_ID:
             # ツイートから，@以下を削除し，対象単語のみを抽出
             searchword = re.sub(r'^@.+? ', '', status.text)
@@ -166,8 +160,16 @@ def __main():
         makecloud(tw, './wordcloud_image/' + filename_time + '.png', tw.search_tweet)
 
         # ツイート内容を以下の変数に記述
-        tweet = '.@' + status.user.screen_name + ' ' + ' '.join(searchword_list) + ' ' + filename_time \
-                                + ' #wordcloud #ワードクラウド'
+        tweet = '@' + status.user.screen_name + ' ' + ' '.join(searchword_list) + ' ' + filename_time \
+                    + ' #wordcloud #ワードクラウド'
+
+        print(status.user.screen_name)
+
+        # 画像を添付してツイート
+        twpy.api.update_with_media(filename='./wordcloud_image/'+filename_time+'.png',
+                                   status=tweet,
+                                   in_reply_to_status_id=status.id
+                                   )
 
 
 if __name__ == '__main__':
