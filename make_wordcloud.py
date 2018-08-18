@@ -90,6 +90,8 @@ def makecloud(tw, filename, object_tweet):
         # pprint(result)
 
         for morph in result:
+            # 全角スペースを半角スペースに置換
+            morph = morph.replace('　', ' ')
             element = re.split(r2, morph)
             if '名詞' in element and '組織' not in element:
                 word_list.append(element[0])
@@ -105,7 +107,7 @@ def makecloud(tw, filename, object_tweet):
                   u'さん', u'して', u'くれる', u'やる', u'くださる', u'そう', u'せる', u'した', \
                   u'思う', u'それ', u'ここ', u'ちゃん', u'くん', u'', u'て', u'に',u'を',u'は', \
                   u'の', u'が', u'と', u'た', u'し', u'で', u'ない', u'も', u'な', u'い', \
-                  u'か', u'ので', u'よう', u'', u'https', u'やっ', u'なっ', u'RT'
+                  u'か', u'ので', u'よう', u'', u'https', u'やっ', u'なっ', u'RT', u'co'
                   ]
 
     if len(tw.keywords) > 0:
