@@ -28,7 +28,7 @@ WORKDIR /opt/mecab-ipadic-neologd
 RUN ./bin/install-mecab-ipadic-neologd -n -y
 
 WORKDIR /
-RUN git clone https://github.com/a-lilas/twitter-wordcloud-bot.git
+RUN git clone -b rest https://github.com/a-lilas/twitter-wordcloud-bot.git
 WORKDIR /twitter-wordcloud-bot
 
 RUN pip3 install --upgrade pip
