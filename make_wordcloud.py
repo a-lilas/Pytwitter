@@ -16,19 +16,19 @@ from wordcloud import WordCloud
 class TwitterOperator:
 
     def __init__(self):
-        self.data = []
         self.reply_to_me = []
         self.search_tweet = []
         self.keywords = []
         self.me = twpy.api.me()
 
     def getTimeline(self, get_id):
+        self.search_tweet = []
         # 特定のidのタイムラインを取得
         user_id = get_id
         for tweet in twpy.api.user_timeline(user_id, count=100):
-            self.data.append(tweet)
+            self.search_tweet.append(tweet.text)
 
-        return self.data
+        return self.search_tweet
 
     def getMyLatestTweetID(self):
         # 自分の最新ツイートを取得,そのツイートIDを返す
