@@ -25,7 +25,7 @@ class TwitterOperator:
     def getTimeline(self, get_id):
         # 特定のidのタイムラインを取得
         user_id = get_id
-        for tweet in twpy.api.user_timeline(user_id, count=600):
+        for tweet in twpy.api.user_timeline(user_id, count=100):
             self.data.append(tweet)
 
         return self.data
@@ -67,7 +67,7 @@ class TwitterOperator:
         # query = ' OR '.join(keywords)
         query = query + ' -RT'
 
-        for tweet in twpy.api.search(q=query, count=600):
+        for tweet in twpy.api.search(q=query, count=90):
             self.search_tweet.append(tweet.text)
 
         return self.search_tweet
