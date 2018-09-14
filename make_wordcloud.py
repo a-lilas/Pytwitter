@@ -83,7 +83,7 @@ def makecloud(tw, filename, object_tweet):
     for i, tweet in enumerate(object_tweet):
         # MeCabによる実装
         tagger = MeCab.Tagger()
-        result = tagger.parse(tweet)
+        result = p.parse(tweet)
 
         # 改行による分割
         result = re.split(r1, result)
@@ -93,6 +93,7 @@ def makecloud(tw, filename, object_tweet):
             # 全角スペースを半角スペースに置換
             morph = morph.replace('　', ' ')
             element = re.split(r2, morph)
+            print(element)
             if '名詞' in element and '組織' not in element:
                 word_list.append(element[0])
 
@@ -139,7 +140,7 @@ def __main():
         print(status.created_at)
         if str(status.in_reply_to_screen_name) == secret.MY_USER_ID:
             # ツイートから，@以下を削除し，対象単語のみを抽出
-            searchword = re.sub(r'^@.+? ', '', status.text)
+            searchword = re.sub(r'([ 　\n]*@[a-zA-Z0-9_]+[ 　\n]*)', '', status.text)
 
             # filename:時刻を名前にする
             filename_time = str(datetime.datetime.today())
